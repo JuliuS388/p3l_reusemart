@@ -89,3 +89,9 @@ Route::post('/admin/expired-items/update', [AdminController::class, 'updateExpir
 
 Route::get('/penitip/penarikan-saldo', [PenitipController::class, 'showPenarikanSaldo'])->name('penitip.penarikan-saldo.form');
 Route::post('/penitip/penarikan-saldo', [PenitipController::class, 'ajukanPenarikanSaldo'])->name('penitip.penarikan-saldo');
+
+// ===== ROUTE KERANJANG DAN TRANSAKSI PEMBELI =====
+Route::post('/keranjang/tambah/{id}', [PembeliController::class, 'tambahKeKeranjang'])->name('keranjang.tambah');
+Route::get('/keranjang', [PembeliController::class, 'lihatKeranjang'])->name('keranjang.lihat');
+Route::post('/keranjang/checkout', [PembeliController::class, 'checkoutKeranjang'])->name('keranjang.checkout');
+Route::post('/keranjang/bayar', [PembeliController::class, 'bayarKeranjang'])->name('keranjang.bayar');

@@ -69,7 +69,10 @@
 
 
             <div class="d-flex gap-2 mb-3">
-                <button class="btn btn-success w-50">+ Keranjang</button>
+                <form action="{{ route('keranjang.tambah', $barang->id_barang) }}" method="POST" class="w-50">
+                    @csrf
+                    <button type="submit" class="btn btn-success w-100">+ Keranjang</button>
+                </form>
                 <button class="btn btn-outline-success w-50">Beli</button>
             </div>
 

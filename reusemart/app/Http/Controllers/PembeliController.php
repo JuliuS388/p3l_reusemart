@@ -210,5 +210,101 @@ class PembeliController extends Controller
             ], 500);
         }
     }
+    public function tambahKeKeranjang($id)
+    {
+        $barang = \App\Models\Barang::findOrFail($id);
+        $keranjang = session()->get('keranjang', []);
+        if (!isset($keranjang[$id])) {
+            $keranjang[$id] = [
+                'id' => $barang->id_barang ?? $barang->id,
+                'nama' => $barang->nama_barang ?? $barang->nama,
+                'harga' => $barang->harga_barang ?? $barang->harga,
+                'qty' => 1
+            ];
+        } else {
+            $keranjang[$id]['qty'] += 1;
+        }
+        session(['keranjang' => $keranjang]);
+        return redirect()->back()->with('success', 'Barang ditambahkan ke keranjang!');
+    }
+
+    public function lihatKeranjang()
+    {
+        $keranjang = session('keranjang', []);
+        $expired = session('checkout_expired_at');
+        if ($expired && now()->gt($expired)) {
+            foreach ($keranjang as $item) {
+                $barang = \App\Models\Barang::find($item['id']);
+                if ($barang && $barang->status_barang == 'Terjual') {
+                    $barang->status_barang = 'Tersedia';
+                    $barang->save();
+                }
+            }
+            session()->forget(['keranjang', 'checkout_expired_at', 'metode_pengiriman']);
+            return redirect()->route('home')->with('error', 'Waktu pembayaran habis, keranjang dikosongkan!');
+        }
+        return view('pembeli.keranjang', compact('keranjang', 'expired'));
+    }
+
+    public function checkoutKeranjang(Request $request)
+    {
+        $keranjang = session('keranjang', []);
+        if (empty($keranjang)) {
+            return redirect()->back()->with('error', 'Keranjang kosong!');
+        }
+        $metode = $request->input('metode_pengiriman', 'ambil_sendiri');
+        session(['metode_pengiriman' => $metode]);
+        foreach ($keranjang as $item) {
+            $barang = \App\Models\Barang::find($item['id']);
+            if ($barang && $barang->status_barang == 'Tersedia') {
+                $barang->status_barang = 'Terjual';
+                $barang->save();
+            }
+        }
+        session(['checkout_expired_at' => now()->addMinute()]);
+        return redirect()->route('keranjang.lihat')->with('success', 'Silakan bayar dalam 1 menit!');
+    }
+
+    public function bayarKeranjang(Request $request)
+    {
+        $keranjang = session('keranjang', []);
+        $expired = session('checkout_expired_at');
+        if (now()->gt($expired)) {
+            foreach ($keranjang as $item) {
+                $barang = \App\Models\Barang::find($item['id']);
+                if ($barang && $barang->status_barang == 'Terjual') {
+                    $barang->status_barang = 'Tersedia';
+                    $barang->save();
+                }
+            }
+            session()->forget(['keranjang', 'checkout_expired_at', 'metode_pengiriman']);
+            return redirect()->route('home')->with('error', 'Waktu pembayaran habis, keranjang dikosongkan!');
+        }
+        $user = auth()->user();
+        $pembeli = \App\Models\Pembeli::where('id_user', $user->id_user ?? $user->id)->first();
+        $transaksi = new \App\Models\Transaksi();
+        $transaksi->id_pembeli = $pembeli->id_pembeli ?? $pembeli->id;
+        $transaksi->tanggal_transaksi = now();
+        $transaksi->total_harga = collect($keranjang)->sum(function($item) { return $item['harga'] * $item['qty']; });
+        $transaksi->status_transaksi = 'Sudah Diterima';
+        $transaksi->save();
+        foreach ($keranjang as $item) {
+            \App\Models\DetailTransaksi::create([
+                'id_transaksi' => $transaksi->id_transaksi ?? $transaksi->id,
+                'id_barang' => $item['id'],
+                'qty' => $item['qty'],
+                'harga' => $item['harga'],
+                'subTotal_harga' => $item['harga'] * $item['qty'],
+                'rating' => 0,
+            ]);
+            $barang = \App\Models\Barang::find($item['id']);
+            if ($barang) {
+                $barang->status_barang = 'Terjual';
+                $barang->save();
+            }
+        }
+        session()->forget(['keranjang', 'checkout_expired_at', 'metode_pengiriman']);
+        return redirect()->route('keranjang.lihat')->with('success', 'Pembayaran berhasil!');
+    }
 }
 

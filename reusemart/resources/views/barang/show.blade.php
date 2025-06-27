@@ -87,6 +87,10 @@
 
                 </table>
                 <a href="{{ route('barang.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+                <form action="{{ route('keranjang.tambah', $barang->id_barang) }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-primary mt-3">Tambah ke Keranjang</button>
+                </form>
             </div>
         </div>
     </div>

@@ -44,7 +44,7 @@
                 </form>
 
                 <div class="d-flex align-items-center gap-2">
-                    <a href="#" class="text-dark">
+                    <a href="{{ route('keranjang.lihat') }}" class="text-dark">
                         <i class="bi bi-cart3 fs-5"></i>
                     </a>
 
