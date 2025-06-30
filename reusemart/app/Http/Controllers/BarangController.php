@@ -14,32 +14,7 @@ use Illuminate\Support\Carbon;
 
 class BarangController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $search = $request->search;
-
-    //     $barangQuery = Barang::with(['kategori', 'penitip', 'pegawai']);
-
-    //     if ($search) {
-    //         $barangQuery->where(function ($query) use ($search) {
-    //             $query->where('nama_barang', 'like', "%$search%")
-    //                 ->orWhere('kode_produk', 'like', "%$search%")
-    //                 ->orWhereHas('kategori', function ($q) use ($search) {
-    //                     $q->where('nama_kategori', 'like', "%$search%");
-    //                 })
-    //                 ->orWhereHas('penitip', function ($q) use ($search) {
-    //                     $q->where('nama_penitip', 'like', "%$search%");
-    //                 })
-    //                 ->orWhereHas('pegawai', function ($q) use ($search) {
-    //                     $q->where('nama_pegawai', 'like', "%$search%");
-    //                 });
-    //         });
-    //     }
-
-    //     $barang = $barangQuery->get();
-
-    //     return view('barang.index', compact('barang'));
-    // }
+    
 
     public function index(Request $request)
     {
@@ -168,7 +143,6 @@ class BarangController extends Controller
             }
         }
 
-        // Update tanggal_batas_penitipan jika tanggal_masuk berubah
         if ($request->tanggal_masuk != $barang->tanggal_masuk) {
             $validated['tanggal_batas_penitipan'] = \Carbon\Carbon::parse($request->tanggal_masuk)->addDays(30);
         }
@@ -215,8 +189,8 @@ class BarangController extends Controller
     private function generateNotaNumber($id_barang)
     {
         $tanggal = Carbon::now();
-        $tahun = $tanggal->format('Y'); // 4 digit tahun, misal 2024
-        $bulan = $tanggal->format('m'); // 2 digit bulan, misal 06
+        $tahun = $tanggal->format('Y');
+        $bulan = $tanggal->format('m'); 
         return "$tahun.$bulan." . str_pad($id_barang, 3, '0', STR_PAD_LEFT);
     }
 
@@ -284,7 +258,7 @@ public function updateToDonation($id)
 {
     $barang = Barang::findOrFail($id);
     
-    // Check if item is expired (7 days after batas penitipan)
+
     if (!$barang->tanggal_batas_penitipan || 
         !Carbon::parse($barang->tanggal_batas_penitipan)->addDays(7)->isPast()) {
         return redirect()->route('barang.index')

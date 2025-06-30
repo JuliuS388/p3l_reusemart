@@ -52,7 +52,6 @@ class PembeliController extends Controller
         return back()->with('success', 'Rating berhasil disimpan.');
     }
 
-    // API untuk profile pembeli
     public function apiShow($id)
     {
         $pembeli = Pembeli::with('alamat')->find($id);
@@ -62,14 +61,12 @@ class PembeliController extends Controller
         return response()->json(['data' => $pembeli]);
     }
 
-    // API untuk riwayat transaksi pembeli (SEMUA STATUS, sesuai user login)
     public function apiTransaksi($id = null)
     {
         if (!$id) {
             return response()->json(['message' => 'ID Pembeli tidak ditemukan'], 404);
         }
 
-        // Debug: Log the incoming ID
         \Log::info('Fetching transactions for pembeli ID: ' . $id);
 
         $pembeli = Pembeli::find($id);
@@ -78,7 +75,6 @@ class PembeliController extends Controller
             return response()->json(['message' => 'Pembeli not found'], 404);
         }
 
-        // Get transactions with eager loading
         $transaksi = Transaksi::where('id_pembeli', $id)
             ->with(['detailTransaksi' => function($query) {
                 $query->with(['barang' => function($query) {
@@ -88,7 +84,6 @@ class PembeliController extends Controller
             ->orderBy('tanggal_transaksi', 'desc')
             ->get();
 
-        // Debug: Log transaction data
         \Log::info('Transactions found:', [
             'count' => $transaksi->count(),
             'data' => $transaksi->toArray()
@@ -148,7 +143,7 @@ class PembeliController extends Controller
                 'email_pembeli' => $request->email_pembeli,
                 'noTelp_pembeli' => $request->noTelp_pembeli,
                 'username_pembeli' => $request->username_pembeli,
-                'poin' => 0, // Default poin awal
+                'poin' => 0,
             ]);
 
             return response()->json([
@@ -281,15 +276,15 @@ class PembeliController extends Controller
             return redirect()->route('home')->with('error', 'Waktu pembayaran habis, keranjang dikosongkan!');
         }
         $user = auth()->user();
-        $pembeli = \App\Models\Pembeli::where('id_user', $user->id_user ?? $user->id)->first();
-        $transaksi = new \App\Models\Transaksi();
+        $pembeli = Pembeli::where('id_user', $user->id_user ?? $user->id)->first();
+        $transaksi = new Transaksi();
         $transaksi->id_pembeli = $pembeli->id_pembeli ?? $pembeli->id;
         $transaksi->tanggal_transaksi = now();
         $transaksi->total_harga = collect($keranjang)->sum(function($item) { return $item['harga'] * $item['qty']; });
         $transaksi->status_transaksi = 'Sudah Diterima';
         $transaksi->save();
         foreach ($keranjang as $item) {
-            \App\Models\DetailTransaksi::create([
+            DetailTransaksi::create([
                 'id_transaksi' => $transaksi->id_transaksi ?? $transaksi->id,
                 'id_barang' => $item['id'],
                 'qty' => $item['qty'],

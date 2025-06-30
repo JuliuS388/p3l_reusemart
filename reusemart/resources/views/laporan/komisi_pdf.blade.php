@@ -51,7 +51,6 @@
 </head>
 <body>
 
-    {{-- HEADER --}}
     <div class="kop">
         <h3>ReUse Mart</h3>
         <p>Jl. Green Eco Park No. 456 Yogyakarta</p>
@@ -69,7 +68,6 @@
             </table>
         </div>
 
-        {{-- TABEL KOMISI --}}
         <table class="table">
             <thead>
                 <tr>

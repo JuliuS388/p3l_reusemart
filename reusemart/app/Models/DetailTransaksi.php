@@ -13,7 +13,7 @@ class DetailTransaksi extends Model
         'id_barang',
         'id_transaksi',
         'subTotal_harga',
-        'rating'  // tambahkan kolom rating di fillable
+        'rating'
     ];
 
     public function barang()

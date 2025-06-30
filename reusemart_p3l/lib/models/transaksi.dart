@@ -60,7 +60,6 @@ class Transaksi {
     try {
       print('Parsing Transaksi JSON: $json'); // Debug print
 
-      // Parse tanggal_transaksi
       DateTime tanggal;
       if (json['tanggal_transaksi'] is String) {
         tanggal = DateTime.parse(json['tanggal_transaksi']);
@@ -70,7 +69,6 @@ class Transaksi {
         tanggal = DateTime.now();
       }
 
-      // Parse total_harga
       double total;
       if (json['total_harga'] is int) {
         total = (json['total_harga'] as int).toDouble();
@@ -82,7 +80,7 @@ class Transaksi {
         total = 0.0;
       }
 
-      // Parse detail_transaksi
+
       List<DetailTransaksi> details = [];
       if (json['detail_transaksi'] != null) {
         if (json['detail_transaksi'] is List) {
@@ -92,13 +90,12 @@ class Transaksi {
         }
       }
 
-      // Parse status_transaksi
       String status = json['status_transaksi'] ?? 'menunggu konfirmasi';
       if (status.isEmpty) {
         status = 'menunggu konfirmasi';
       }
 
-      print('Parsed status_transaksi: $status'); // Debug print
+      print('Parsed status_transaksi: $status'); 
 
       return Transaksi(
         idTransaksi: json['id_transaksi'] ?? 0,

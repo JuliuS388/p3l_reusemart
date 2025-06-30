@@ -54,7 +54,6 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ),
 
-            // Product Info
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -195,7 +194,6 @@ class ProductDetailPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Add to cart functionality
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Fitur keranjang akan segera hadir!'),
@@ -213,7 +211,6 @@ class ProductDetailPage extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Buy now functionality
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Fitur pembelian akan segera hadir!'),

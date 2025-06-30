@@ -51,7 +51,6 @@
 </head>
 <body>
 
-    {{-- HEADER --}}
     <div class="kop">
         <h3>ReUse Mart</h3>
         <p>Jl. Green Eco Park No. 456 Yogyakarta</p>
@@ -93,7 +92,6 @@
                         </tr>
                     @endfor
 
-                    {{-- TOTAL ROW --}}
                     <tr>
                         <th class="text-right" colspan="1">Total</th>
                         <th class="text-center">{{ $totalTransaksi }}</th>
@@ -104,7 +102,6 @@
         </div>
     </div>
 
-    {{-- TABLE --}}
     
 
 </body>

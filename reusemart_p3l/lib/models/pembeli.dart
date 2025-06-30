@@ -20,7 +20,6 @@ class Pembeli {
   });
 
   factory Pembeli.fromJson(Map<String, dynamic> json) {
-    // Helper function untuk konversi ke int
     int toInt(dynamic value) {
       if (value == null) return 0;
       if (value is int) return value;
@@ -28,7 +27,6 @@ class Pembeli {
       return 0;
     }
 
-    // Helper function untuk konversi ke String
     String? toString(dynamic value) {
       if (value == null) return null;
       return value.toString();
@@ -61,7 +59,7 @@ class Alamat {
   });
 
   factory Alamat.fromJson(Map<String, dynamic> json) {
-    // Helper function untuk konversi ke int
+
     int toInt(dynamic value) {
       if (value == null) return 0;
       if (value is int) return value;
@@ -69,7 +67,6 @@ class Alamat {
       return 0;
     }
 
-    // Helper function untuk konversi ke String
     String? toString(dynamic value) {
       if (value == null) return null;
       return value.toString();

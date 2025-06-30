@@ -77,7 +77,6 @@ class InfoPage extends StatelessWidget {
                 ],
               ),
             ),
-            // About Section
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -126,7 +125,6 @@ class InfoPage extends StatelessWidget {
                 ],
               ),
             ),
-            // Features Section
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

@@ -27,11 +27,11 @@ class Barang extends Model
         'id_kategori',
         'id_penitip',
         'id_pegawai',
-        'id_hunter',              // ditambahkan
+        'id_hunter',              
         'deskripsi_barang',
         'berat_barang',
         'tanggal_batas_penitipan',
-        'perpanjangan',           // ditambahkan
+        'perpanjangan',          
     ];
 
     public function donasi()

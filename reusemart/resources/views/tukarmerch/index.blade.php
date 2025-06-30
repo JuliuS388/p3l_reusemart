@@ -4,7 +4,6 @@
 <div class="container">
     <h2 class="mb-4 fw-bold">Daftar Penukaran Merchandise</h2>
 
-    {{-- Alert --}}
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -12,7 +11,6 @@
         </div>
     @endif
 
-    {{-- Filter --}}
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-4">
             <label for="status" class="form-label">Filter Status</label>
@@ -24,7 +22,6 @@
         </div>
     </form>
 
-    {{-- Tabel --}}
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-success text-center">

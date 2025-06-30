@@ -36,8 +36,8 @@ class AuthController extends Controller
                     $pembeli = Pembeli::with('alamat')->where('id_user', $user->id_user)->first();
 
                     if ($pembeli) {
-                        session(['pembeli' => $pembeli]); // simpan ke session
-                        return redirect()->route('home'); // arahkan ke halaman utama
+                        session(['pembeli' => $pembeli]); 
+                        return redirect()->route('home'); 
                     } else {
                         Auth::logout();
                         return redirect()->route('login.form')->with('error', 'Data pembeli tidak ditemukan.');
@@ -46,8 +46,8 @@ class AuthController extends Controller
                     $penitip = Penitip::where('id_user', $user->id_user)->first();
 
                     if ($penitip) {
-                        session(['penitip' => $penitip]); // simpan ke session
-                        return redirect()->route('penitip.penarikan-saldo.form'); // arahkan ke halaman penarikan saldo
+                        session(['penitip' => $penitip]); 
+                        return redirect()->route('penitip.penarikan-saldo.form');
                     } else {
                         Auth::logout();
                         return redirect()->route('login.form')->with('error', 'Data penitip tidak ditemukan.');
@@ -85,13 +85,11 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        session()->forget(['pembeli', 'penitip']); // Hapus session pembeli dan penitip
+        session()->forget(['pembeli', 'penitip']); 
         return redirect()->route('login.form');
     }
 
-    /**
-     * Login API untuk Flutter/mobile
-     */
+
     public function apiLogin(Request $request)
     {
         $request->validate([
@@ -106,10 +104,8 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Jika role pembeli atau penitip, lanjutkan
         if ($user->role === 'pembeli' || $user->role === 'penitip') {
             if ($user->role === 'pembeli') {
-                // Ambil data pembeli terkait user
                 $pembeli = \App\Models\Pembeli::where('id_user', $user->id_user)->first();
                 if (!$pembeli) {
                     return response()->json([
@@ -127,8 +123,7 @@ class AuthController extends Controller
                     ],
                 ]);
             } else {
-                // Ambil data penitip terkait user
-                $penitip = \App\Models\Penitip::where('id_user', $user->id_user)->first();
+                $penitip = Penitip::where('id_user', $user->id_user)->first();
                 if (!$penitip) {
                     return response()->json([
                         'message' => 'Data penitip tidak ditemukan',
@@ -147,7 +142,6 @@ class AuthController extends Controller
             }
         }
 
-        // Jika bukan pembeli atau penitip, tolak
         return response()->json([
             'message' => 'Role tidak diizinkan',
         ], 403);

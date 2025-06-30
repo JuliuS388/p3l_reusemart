@@ -23,7 +23,7 @@ class DetailTransaksi {
     try {
       print('Parsing DetailTransaksi: $json');
       
-      // Parse subTotal_harga
+
       double subTotalHarga;
       if (json['subTotal_harga'] is int) {
         subTotalHarga = (json['subTotal_harga'] as int).toDouble();

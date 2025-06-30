@@ -56,7 +56,6 @@
                 </form>
             </div>
             <script>
-                // Countdown timer
                 let expiredAt = new Date("{{ \Carbon\Carbon::parse($expired)->toIso8601String() }}").getTime();
                 let x = setInterval(function() {
                     let now = new Date().getTime();
